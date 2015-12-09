@@ -8,43 +8,47 @@ Update () {
 
 Update
 
-echo "-- Prepare configuration for MySQL and phpMyAdmin --"
+echo "-- Prepare configuration for MySQL --"
 sudo debconf-set-selections <<< "mysql-server mysql-server/root_password password root"
 sudo debconf-set-selections <<< "mysql-server mysql-server/root_password_again password root"
-sudo debconf-set-selections <<< "phpmyadmin phpmyadmin/dbconfig-install boolean true"
-sudo debconf-set-selections <<< "phpmyadmin phpmyadmin/app-password-confirm password root"
-sudo debconf-set-selections <<< "phpmyadmin phpmyadmin/mysql/admin-pass password root"
-sudo debconf-set-selections <<< "phpmyadmin phpmyadmin/mysql/app-pass password root"
-sudo debconf-set-selections <<< "phpmyadmin phpmyadmin/reconfigure-webserver multiselect apache2"
 
 echo "-- Install tools and helpers --"
-sudo apt-get install -y vim curl git python-software-properties
+sudo apt-get install -y vim python-software-properties htop curl git npm
 Update
 
 echo "-- Install PPA's --"
-sudo add-apt-repository ppa:ondrej/php5-5.6
-sudo add-apt-repository ppa:ondrej/mysql-5.6
+sudo add-apt-repository ppa:ondrej/php-7.0
 sudo add-apt-repository ppa:chris-lea/node.js
+sudo add-apt-repository ppa:rwky/redis
 Update
 
 echo "-- Install packages --"
-sudo apt-get install -y php5 apache2 libapache2-mod-php5 php5-curl php5-gd php5-mcrypt php5-xsl mysql-server php5-mysql git-core php5-xdebug phpmyadmin nodejs npm
+sudo apt-get install -y php7.0-common php7.0-json php7.0-opcache php7.0-cli libapache2-mod-php7.0 php7.0 php7.0-mysql php7.0-fpm php7.0-curl php7.0-gd
+sudo apt-get install -y apache2 mysql-server-5.6 git-core nodejs rabbitmq-server redis-server
 Update
 
-echo "-- Configure Xdebug --"
-cat << EOF | sudo tee -a /etc/php5/mods-available/xdebug.ini
-xdebug.scream=1
-xdebug.cli_color=1
-xdebug.show_local_vars=1
-EOF
-
-echo "-- Configure Apache --"
-sed -i "s/error_reporting = .*/error_reporting = E_ALL/" /etc/php5/apache2/php.ini
-sed -i "s/display_errors = .*/display_errors = On/" /etc/php5/apache2/php.ini
-sed -i 's/AllowOverride None/AllowOverride All/' /etc/apache2/apache2.conf
+echo "-- Configure PHP &Apache --"
+sed -i "s/error_reporting = .*/error_reporting = E_ALL/" /etc/php/7.0/apache2/php.ini
+sed -i "s/display_errors = .*/display_errors = On/" /etc/php/7.0/apache2/php.ini
 sudo a2enmod rewrite
 
-echo "-- Restart apache --"
+echo "-- Creating virtual hosts --"
+sudo mkdir -p /var/www/{myapp,phpmyadmin}
+cat << EOF | sudo tee -a /etc/apache2/sites-available/default.conf
+<VirtualHost *:80>
+    DocumentRoot /var/www/myapp
+    ServerName app1.dev
+</VirtualHost>
+
+<VirtualHost *:80>
+    DocumentRoot /var/www/phpmyadmin
+    ServerName phpmyadmin.dev
+</VirtualHost>
+EOF
+sudo ln -fs /vagrant/ /var/www/myapp
+sudo a2ensite default.conf
+
+echo "-- Restart Apache --"
 sudo /etc/init.d/apache2 restart
 
 echo "-- Install Composer --"
@@ -52,16 +56,12 @@ curl -s https://getcomposer.org/installer | php
 sudo mv composer.phar /usr/local/bin/composer
 sudo chmod +x /usr/local/bin/composer
 
-echo "-- Install phpDocumentor --"
-wget http://www.phpdoc.org/phpDocumentor.phar
-sudo mv phpDocumentor.phar /usr/local/bin/phpdoc
-sudo chmod +x /usr/local/bin/phpdoc
+echo "-- Install phpMyAdmin --"
+wget -k https://files.phpmyadmin.net/phpMyAdmin/4.0.10.11/phpMyAdmin-4.0.10.11-english.tar.gz
+sudo tar -xzvf phpMyAdmin-4.0.10.11-english.tar.gz -C /var/www/
+sudo rm phpMyAdmin-4.0.10.11-english.tar.gz
+sudo mv /var/www/phpMyAdmin-4.0.10.11-english/ /var/www/phpmyadmin
 
-echo "-- Install PHPUnit --"
-wget -k https://phar.phpunit.de/phpunit.phar
-sudo mv phpunit.phar /usr/local/bin/phpunit
-sudo chmod +x /usr/local/bin/phpunit
-
-echo "-- Setup database --"
+echo "-- Setup databases --"
 mysql -uroot -proot -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'root' WITH GRANT OPTION; FLUSH PRIVILEGES;"
 mysql -uroot -proot -e "CREATE DATABASE my_database";
