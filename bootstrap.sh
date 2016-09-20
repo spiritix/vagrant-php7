@@ -33,8 +33,12 @@ sed -i "s/display_errors = .*/display_errors = On/" /etc/php/7.0/apache2/php.ini
 sudo a2enmod rewrite
 
 echo "-- Creating virtual hosts --"
-sudo mkdir -p /var/www/{app,phpmyadmin}
+sudo ln -fs /vagrant/public/ /var/www/app
 cat << EOF | sudo tee -a /etc/apache2/sites-available/default.conf
+<Directory "/var/www/">
+    AllowOverride All
+</Directory>
+
 <VirtualHost *:80>
     DocumentRoot /var/www/app
     ServerName app.dev
@@ -45,7 +49,6 @@ cat << EOF | sudo tee -a /etc/apache2/sites-available/default.conf
     ServerName phpmyadmin.dev
 </VirtualHost>
 EOF
-sudo ln -fs /vagrant/ /var/www/app
 sudo a2ensite default.conf
 
 echo "-- Restart Apache --"

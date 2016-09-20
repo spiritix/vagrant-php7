@@ -5,7 +5,7 @@ VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
-    config.vm.box = "ubuntu/xenial64"
+    config.vm.box = "ubuntu/trusty64"
 
     # Mount shared folder using NFS
     config.vm.synced_folder ".", "/vagrant",
@@ -14,10 +14,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         :mount_options => ['nolock,vers=3,udp,noatime']
 
     # Do some network configuration
-    config.vm.network "private_network", ip: "192.168.100.1"
-
-    config.vm.network :forwarded_port, :auto_correct => true, guest: 80, host: 8080
-    config.vm.network :forwarded_port, :auto_correct => true, guest: 3306, host: 4711
+    config.vm.network "private_network", ip: "192.168.100.100"
 
     # Assign a quarter of host memory and all available CPU's to VM
     # Depending on host OS this has to be done differently.

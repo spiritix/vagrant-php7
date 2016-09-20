@@ -1,13 +1,13 @@
 # Vagrant PHP7 
 
-A simple Vagrant LAMP setup running the finally released stable PHP7.
+A simple Vagrant LAMP setup running PHP7.
 
 ## What's inside?
 
-- Ubuntu 16.04 LTS (Xenial Xerus)
+- Ubuntu 14.04.3 LTS (Trusty Tahr)
 - Vim, Git, Curl, etc.
 - Apache
-- PHP7 with some important of extensions
+- PHP7 with some extensions
 - MySQL 5.6
 - Node.js with NPM
 - RabbitMQ
@@ -19,4 +19,10 @@ A simple Vagrant LAMP setup running the finally released stable PHP7.
 
 - Clone this repository into your project
 - Run ``vagrant up``
-- Open ``http://192.168.100.1/`` in your browser
+- Add the following lines to your hosts file:
+````
+192.168.100.100 app.dev
+192.168.100.100 phpmyadmin.dev
+````
+- Navigate to ``http://app.dev/`` 
+- Navigate to ``http://phpmyadmin.dev/`` (both username and password are 'root')
