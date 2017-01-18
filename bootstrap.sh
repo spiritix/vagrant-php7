@@ -24,7 +24,18 @@ curl -sL https://deb.nodesource.com/setup_5.x | sudo -E bash -
 
 echo "-- Install packages --"
 sudo apt-get install -y --force-yes apache2 mysql-server-5.6 git-core nodejs rabbitmq-server redis-server
-sudo apt-get install -y --force-yes php7.0-common php7.0-dev php7.0-json php7.0-opcache php7.0-cli libapache2-mod-php7.0 php7.0 php7.0-mysql php7.0-fpm php7.0-curl php7.0-gd php7.0-mcrypt php7.0-mbstring php7.0-bcmath php7.0-zip
+sudo apt-get install -y --force-yes php7.0-common php7.0-dev php7.0-json php7.0-opcache php7.0-cli libapache2-mod-php7.0 php7.0 php7.0-mysql php7.0-fpm php7.0-curl php7.0-gd php7.0-mcrypt php7.0-mbstring php7.0-bcmath php7.0-zip php7.0-intl
+Update
+
+echo "--Install  and enabling xdebug--"
+sudo apt-get -y --force-yes  install php-xdebug
+cat << EOF | sudo tee -a /etc/php/7.0/apache2/conf.d/20-xdebug.ini    
+xdebug.remote_enable = 1
+xdebug.remote_connect_back = 1
+xdebug.remote_port = 9000
+xdebug.max_nesting_level = 512
+xdebug.show_error_trace = 1
+EOF
 Update
 
 echo "-- Configure PHP &Apache --"
@@ -34,6 +45,8 @@ sudo a2enmod rewrite
 
 echo "-- Creating virtual hosts --"
 sudo ln -fs /vagrant/public/ /var/www/app
+
+
 cat << EOF | sudo tee -a /etc/apache2/sites-available/default.conf
 <Directory "/var/www/">
     AllowOverride All
@@ -50,6 +63,9 @@ cat << EOF | sudo tee -a /etc/apache2/sites-available/default.conf
 </VirtualHost>
 EOF
 sudo a2ensite default.conf
+
+#vi /etc/php/7.0/mods-available/xdebug.ini
+#xdebug.show_error_trace = 1
 
 echo "-- Restart Apache --"
 sudo /etc/init.d/apache2 restart
