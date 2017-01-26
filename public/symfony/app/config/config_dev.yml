@@ -1,5 +1,6 @@
 imports:
     - { resource: config.yml }
+    - { resource: '@RabbitMQBundle/Resources/config/config_dev.yml' }
 
 framework:
     router:
@@ -8,19 +9,18 @@ framework:
     profiler: { only_exceptions: false }
 
 web_profiler:
-    toolbar: true
+    toolbar: %kernel.debug%
     intercept_redirects: false
 
 monolog:
     handlers:
         main:
-            type: stream
-            path: "%kernel.logs_dir%/%kernel.environment%.log"
-            level: debug
-            channels: [!event]
+            type:   stream
+            path:   "%kernel.logs_dir%/%kernel.environment%.log"
+            level:  info
         console:
             type:   console
-            channels: [!event, !doctrine]
+            bubble: false
         # uncomment to get logging in your browser
         # you may have to allow bigger header sizes in your Web server configuration
         #firephp:
@@ -30,5 +30,8 @@ monolog:
         #    type:   chromephp
         #    level:  info
 
+assetic:
+    use_controller: true
+
 #swiftmailer:
-#    delivery_addresses: ['me@example.com']
+#    delivery_address: me@example.com

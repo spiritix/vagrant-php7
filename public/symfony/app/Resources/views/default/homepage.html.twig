@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block body_id 'homepage' %}
+
+{#
+    the homepage is a special page which displays neither a header nor a footer.
+    this is done with the 'trick' of defining empty Twig blocks without any content
+#}
+{% block header %}{% endblock %}
+{% block footer %}{% endblock %}
+
+{% block body %}
+    <div class="page-header">
+        <h1>Welcome to the <b>Symfony Demo On Roids</b> application</h1>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="jumbotron">
+                <p>
+                    {{ 'help.browse_app'|trans|raw }}
+                </p>
+                <p>
+                    <a class="btn btn-primary btn-lg" href="{{ path('blog_index') }}">
+                        <i class="fa fa-users"></i> {{ 'action.browse_app'|trans }}
+                    </a>
+                </p>
+            </div>
+        </div>
+
+        <div class="col-sm-6">
+            <div class="jumbotron">
+                <p>
+                    {{ 'help.browse_admin'|trans|raw }}
+                </p>
+                <p>
+                    <a class="btn btn-primary btn-lg" href="{{ path('admin_index') }}">
+                        <i class="fa fa-lock"></i> {{ 'action.browse_admin'|trans }}
+                    </a>
+                </p>
+            </div>
+        </div>
+
+        <h1>
+            <a href="https://github.com/alfonsomga/symfony.demo.on.roids" target="_blank" style="color: #2c3e50">
+                <i class="fa fa-github-square fa-3x"></i>
+            </a>
+        </h1>
+
+    </div>
+{% endblock %}
