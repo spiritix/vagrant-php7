@@ -1,6 +1,6 @@
-# Vagrant PHP7 
+# Vagrant PHP7 by Fersacom
 
-A simple Vagrant LAMP setup running PHP7.
+A simple Vagrant devops LAMP setup running PHP7 on Ubuntu 14.04
 
 ## What's inside?
 
@@ -12,8 +12,11 @@ A simple Vagrant LAMP setup running PHP7.
 - Node.js with NPM
 - RabbitMQ
 - Redis
+- Elasticsearch 2.0
 - Composer
 - phpMyAdmin
+- Symfony installer
+- Symfony apache site
 
 ## How to use
 
@@ -22,7 +25,7 @@ A simple Vagrant LAMP setup running PHP7.
 - Add the following lines to your hosts file:
 ````
 192.168.100.100 app.dev
-192.168.100.100 phpmyadmin.dev
+192.168.100.100 symfony.dev
 ````
 - Navigate to ``http://app.dev/`` 
-- Navigate to ``http://phpmyadmin.dev/`` (both username and password are 'root')
+- Navigate to ``http://symfony.dev/`` 
