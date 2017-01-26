@@ -30,8 +30,8 @@ Update
 echo "-- Install java --"
 sudo apt-get remove openjdk* -y
 sudo apt-get autoremove -y
-sudo apt-get install openjdk-8-jre-headless -y
-Update
+sudo apt-get install openjdk-7-jre-headless -y
+
 
 
 echo "--Install elastic--"
@@ -39,8 +39,20 @@ wget https://download.elastic.co/elasticsearch/elasticsearch/elasticsearch-2.2.0
 sudo dpkg -i elasticsearch-2.2.0.deb
 ### NOT starting elasticsearch by default on bootup, please execute
 sudo update-rc.d elasticsearch defaults 95 10
-sudo /usr/share/elasticsearch/bin/plugin install mobz/elasticsearch-head
-sudo service elasticsearch stop
+sudo /etc/init.d/elasticsearch start
+ sudo /usr/share/elasticsearch/bin/plugin install royrusso/elasticsearch-HQ
+# either of the next two lines is needed to be able to access "localhost:9200" from the host os
+#/domain:port/_plugin/hq/
+sudo echo "network.bind_host: 0" >> /etc/elasticsearch/elasticsearch.yml
+sudo echo "network.host: 0.0.0.0" >> /etc/elasticsearch/elasticsearch.yml
+# enable dynamic scripting
+#sudo echo "script.inline: on" >> /etc/elasticsearch/elasticsearch.yml
+#sudo echo "script.indexed: on" >> /etc/elasticsearch/elasticsearch.yml
+# enable cors (to be able to use Sense)
+#sudo echo "http.cors.enabled: true" >> /etc/elasticsearch/elasticsearch.yml
+#sudo echo "http.cors.allow-origin: /https?:\/\/.*/" >> /etc/elasticsearch/elasticsearch.yml
+sudo /etc/init.d/elasticsearch restart
+
 
 echo "--Install  and enabling xdebug--"
 sudo apt-get -y --force-yes  install php-xdebug

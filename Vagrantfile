@@ -7,11 +7,14 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     config.vm.box = "ubuntu/trusty64"
 
-    # Mount shared folder using NFS
+    # Mount shared folder using LINUX NFS
     config.vm.synced_folder ".", "/vagrant",
         id: "core",
         :nfs => true,
         :mount_options => ['nolock,vers=3,udp,noatime']
+		
+	#if you need  windows uncomment next file
+#   config.vm.synced_folder ".", "/vagrant", :mount_options => ["dmode=777", "fmode=666"]
 
     # Do some network configuration
     config.vm.network "private_network", ip: "192.168.100.100"
