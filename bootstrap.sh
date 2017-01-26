@@ -51,7 +51,11 @@ sudo echo "network.host: 0.0.0.0" >> /etc/elasticsearch/elasticsearch.yml
 # enable cors (to be able to use Sense)
 #sudo echo "http.cors.enabled: true" >> /etc/elasticsearch/elasticsearch.yml
 #sudo echo "http.cors.allow-origin: /https?:\/\/.*/" >> /etc/elasticsearch/elasticsearch.yml
-sudo /etc/init.d/elasticsearch restart
+
+echo "--Stop unnecesary server"
+sudo service rabbitmq-server stop
+sudo service elasticsearch stop
+sudo service redis-server stop
 
 
 echo "--Install  and enabling xdebug--"
