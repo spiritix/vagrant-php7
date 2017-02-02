@@ -7,14 +7,22 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     config.vm.box = "ubuntu/trusty64"
 
-    # Mount shared folder using NFS
+    # Mount shared folder using LINUX NFS
     config.vm.synced_folder ".", "/vagrant",
         id: "core",
         :nfs => true,
         :mount_options => ['nolock,vers=3,udp,noatime']
+		
+	#if you need  windows uncomment next file
+#   config.vm.synced_folder ".", "/vagrant", :mount_options => ["dmode=777", "fmode=666"]
 
     # Do some network configuration
     config.vm.network "private_network", ip: "192.168.100.100"
+    config.vm.network "forwarded_port", guest: 80, host: 8080
+    config.vm.network "forwarded_port", guest: 9200, host: 9200
+    config.vm.network "forwarded_port", guest: 3306, host: 33060
+    config.vm.network "forwarded_port", guest: 6379, host: 6379
+    config.vm.network "forwarded_port", guest: 22, host: 2220
 
     # Assign a quarter of host memory and all available CPU's to VM
     # Depending on host OS this has to be done differently.
@@ -31,7 +39,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
         # Windows...
         else
-            cpus = 4
+            cpus = 2
             mem = 2048
         end
 
@@ -42,3 +50,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     config.vm.provision :shell, :path => "bootstrap.sh"
 
 end
+
+
+#write into /etc/hosts
+#192.168.100.100 app.dev symfony.dev
