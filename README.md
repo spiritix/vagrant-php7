@@ -15,6 +15,10 @@ A simple Vagrant LAMP setup running PHP7.
 - Composer
 - phpMyAdmin
 
+## Prerequisites
+
+- Install https://www.vagrantup.com/downloads.html
+
 ## How to use
 
 - Clone this repository into your project
