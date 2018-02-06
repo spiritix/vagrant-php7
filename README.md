@@ -15,6 +15,10 @@ A simple Vagrant LAMP setup running PHP7.
 - Composer
 - phpMyAdmin
 
+## Prerequisites
+- [Vagrant](https://www.vagrantup.com/downloads.html)
+- Plugin vagrant-vbguest (``vagrant plugin install vagrant-vbguest``)
+
 ## How to use
 
 - Clone this repository into your project
