@@ -1,6 +1,6 @@
 # Vagrant PHP7 
 
-A simple Vagrant LAMP setup running PHP7.
+A simple Vagrant LAMP setup with PHP 7.1 running on Ubuntu 16.04 LTS.
 
 ## What's inside?
 
