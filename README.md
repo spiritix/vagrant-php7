@@ -25,8 +25,8 @@ A simple Vagrant LAMP setup with PHP 7.1 running on Ubuntu 16.04 LTS.
 - Run ``vagrant up``
 - Add the following lines to your hosts file:
 ````
-192.168.100.100 app.local
-192.168.100.100 phpmyadmin.local
+192.168.11.11 app.local
+192.168.11.11 phpmyadmin.local
 ````
 - Navigate to ``http://app.local/`` 
 - Navigate to ``http://phpmyadmin.local/`` (both username and password are 'root')
